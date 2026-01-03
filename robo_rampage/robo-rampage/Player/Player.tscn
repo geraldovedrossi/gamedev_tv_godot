@@ -1,13 +1,81 @@
-[gd_scene load_steps=7 format=3 uid="uid://bb24owuntg5aw"]
+[gd_scene load_steps=13 format=3 uid="uid://bb24owuntg5aw"]
 
 [ext_resource type="Script" uid="uid://dsb4ttwigonqc" path="res://Player/player.gd" id="1_3qydi"]
 [ext_resource type="Script" uid="uid://jbypkq7ruawj" path="res://Player/smooth_camera.gd" id="2_q3lat"]
 [ext_resource type="PackedScene" uid="uid://qgim7khin05y" path="res://Assets/Weapons/SMG.tscn" id="3_ddoul"]
 [ext_resource type="Script" uid="uid://1eugx5jcnlcc" path="res://Player/crosshair.gd" id="3_tok1r"]
+[ext_resource type="PackedScene" uid="uid://ue4sdjhf8uey" path="res://Assets/VFX/sparks.tscn" id="4_8g4oa"]
+[ext_resource type="Texture2D" uid="uid://cm8ytwxoyehnt" path="res://Assets/damage.png" id="6_6ysni"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_l2ndj"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_3qydi"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_ddoul"]
+font_size = 32
+outline_size = 8
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="Animation" id="Animation_vlldt"]
+resource_name = "TakeDamage"
+length = 0.4
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, -2),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1.5, 1.5)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(-2, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_s1rgi"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_j23h2"]
+_data = {
+&"RESET": SubResource("Animation_s1rgi"),
+&"TakeDamage": SubResource("Animation_vlldt")
+}
 
 [node name="Player" type="CharacterBody3D" groups=["player"]]
 script = ExtResource("1_3qydi")
@@ -28,6 +96,29 @@ top_level = true
 script = ExtResource("2_q3lat")
 
 [node name="SMG" parent="CameraPivot/SmoothCamera" instance=ExtResource("3_ddoul")]
+sparks = ExtResource("4_8g4oa")
+
+[node name="RemoteTransform3D" type="RemoteTransform3D" parent="CameraPivot/SmoothCamera"]
+remote_path = NodePath("../../../SubViewportContainer/SubViewport/WeaponCamera")
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="."]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="SubViewportContainer"]
+transparent_bg = true
+handle_input_locally = false
+size = Vector2i(1152, 648)
+render_target_update_mode = 0
+
+[node name="WeaponCamera" type="Camera3D" parent="SubViewportContainer/SubViewport"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, -0.15)
+cull_mask = 2
 
 [node name="CenterContainer" type="CenterContainer" parent="."]
 anchors_preset = 15
@@ -39,3 +130,32 @@ grow_vertical = 2
 [node name="Crosshair" type="Control" parent="CenterContainer"]
 layout_mode = 2
 script = ExtResource("3_tok1r")
+
+[node name="Container" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+size_flags_horizontal = 0
+size_flags_vertical = 0
+
+[node name="Label" type="Label" parent="Container"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+text = "HP: "
+label_settings = SubResource("LabelSettings_ddoul")
+
+[node name="DamageTexture" type="TextureRect" parent="."]
+modulate = Color(1, 1, 1, 0)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(576, 324)
+texture = ExtResource("6_6ysni")
+
+[node name="DamageAnimationPlayer" type="AnimationPlayer" parent="DamageTexture"]
+libraries = {
+&"": SubResource("AnimationLibrary_j23h2")
+}
+autoplay = "RESET"

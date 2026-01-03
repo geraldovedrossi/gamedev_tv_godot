@@ -1,24 +1,32 @@
+class_name Enemy
 extends CharacterBody3D
 
+@onready var navigation_agent_3d: NavigationAgent3D = $NavigationAgent3D
+@onready var animation_player: AnimationPlayer = $AnimationPlayer
+
+@export var attack_range := 1.5
+@export var max_hp := 100
+@export var aggro_range := 12.0
+@export var enemy_damage := 20
 
 const SPEED = 3.0
 const JUMP_VELOCITY = 4.5
 
-@onready var navigation_agent_3d: NavigationAgent3D = $NavigationAgent3D
-
 var player
 var provoked := false
-var aggro_range := 12.0
-
-@export var attack_range := 1.5
-@onready var animation_player: AnimationPlayer = $AnimationPlayer
-
-func _process(_delta: float) -> void:
-	if provoked:
-		navigation_agent_3d.target_position = player.global_position
+var current_hp: int = max_hp:
+	set(value):
+		current_hp = value
+		if current_hp <= 0:
+			queue_free()
+		provoked = true
 
 func _ready() -> void:
 	player = get_tree().get_first_node_in_group("player")
+	
+func _process(_delta: float) -> void:
+	if provoked:
+		navigation_agent_3d.target_position = player.global_position
 
 func _physics_process(delta: float) -> void:
 	var next_position = navigation_agent_3d.get_next_path_position()
@@ -33,10 +41,13 @@ func _physics_process(delta: float) -> void:
 	if provoked && distance <= attack_range:
 		animation_player.play("Attack")
 	
-	if distance <= aggro_range: 
+	if provoked == false && distance <= aggro_range: 
 		provoked = true
-	else:
-		provoked = false
+	else: 
+		if provoked == true && distance <= aggro_range * 3:
+			provoked = true
+		else:
+			provoked = false
 	
 	if direction:
 		look_at_target(direction)
@@ -55,3 +66,4 @@ func look_at_target(direction: Vector3) -> void:
 	
 func attack() -> void:
 	print("Enemy Attack!")
+	player.current_hp -= enemy_damage
