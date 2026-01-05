@@ -1,6 +1,7 @@
-[gd_scene load_steps=8 format=3 uid="uid://qgim7khin05y"]
+[gd_scene load_steps=9 format=3 uid="uid://qgim7khin05y"]
 
 [ext_resource type="PackedScene" uid="uid://5w67j51s56hx" path="res://Assets/Weapons/hitscan_weapon.tscn" id="1_mjgmk"]
+[ext_resource type="PackedScene" uid="uid://ue4sdjhf8uey" path="res://Assets/VFX/sparks.tscn" id="2_bgvyo"]
 [ext_resource type="PackedScene" uid="uid://0iv66aa41rcm" path="res://Assets/Weapons/SMG.glb" id="2_get86"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_get86"]
@@ -29,6 +30,8 @@ size = Vector3(0.03, 0.03, 0.03)
 [node name="SMG" node_paths=PackedStringArray("weapon_mesh", "muzzle_flash") instance=ExtResource("1_mjgmk")]
 weapon_mesh = NodePath("SMG")
 muzzle_flash = NodePath("MuzzleFlash")
+sparks = ExtResource("2_bgvyo")
+automatic = true
 
 [node name="SMG" parent="." index="1" instance=ExtResource("2_get86")]
 transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0.14, -0.065, -0.18)
