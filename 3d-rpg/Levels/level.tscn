@@ -1,10 +1,11 @@
-[gd_scene load_steps=10 format=3 uid="uid://cr4654fn6luyn"]
+[gd_scene load_steps=11 format=3 uid="uid://cr4654fn6luyn"]
 
 [ext_resource type="PackedScene" uid="uid://dc050cjfq6j4r" path="res://Player/player.tscn" id="1_s41d2"]
 [ext_resource type="PackedScene" uid="uid://c1r747q2kwolu" path="res://Assets/3D_Assets/Environment/Topiary_Tree_Vege_01.glb" id="3_uhyyw"]
 [ext_resource type="PackedScene" uid="uid://dgtpru0qdk16m" path="res://Assets/3D_Assets/Environment/Rock_Cliff_Env_03.glb" id="3_wav5q"]
 [ext_resource type="PackedScene" uid="uid://8ysp7bs1esgh" path="res://Assets/3D_Assets/Environment/Bush_Vege_2.glb" id="4_t80w2"]
 [ext_resource type="PackedScene" uid="uid://dso6olko5wr2g" path="res://Assets/3D_Assets/Environment/Tree_Group_Vege.glb" id="5_8a2b0"]
+[ext_resource type="PackedScene" uid="uid://dtljdkolleihi" path="res://Enemy/enemy.tscn" id="6_t80w2"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_54b6e"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -139,3 +140,14 @@ transform = Transform3D(-0.7238952, 0, -0.68991035, 0, 1, 0, 0.68991035, 0, -0.7
 
 [node name="Tree_Group_Vege2" parent="Vegetation" instance=ExtResource("5_8a2b0")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12, -0.22761893, -10)
+
+[node name="Enemies" type="Node3D" parent="."]
+
+[node name="Enemy" parent="Enemies" instance=ExtResource("6_t80w2")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 9.318405, 0.10300863, 5.6957245)
+
+[node name="Enemy2" parent="Enemies" instance=ExtResource("6_t80w2")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 11.918519, 0.10300863, 8.15739)
+
+[node name="Enemy3" parent="Enemies" instance=ExtResource("6_t80w2")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 12.027389, 0.10300863, 3.8618736)
