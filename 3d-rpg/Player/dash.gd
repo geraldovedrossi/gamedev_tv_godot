@@ -12,7 +12,7 @@ var time_remaining := 0.0
 
 func _unhandled_input(event: InputEvent) -> void:
 	if not timer.is_stopped():
-		print("Dash is in CoolDown!")
+		#print("Dash is in CoolDown!")
 		return
 	if not player.is_physics_processing():
 		return
@@ -25,13 +25,13 @@ func _unhandled_input(event: InputEvent) -> void:
 			gpu_particles_3d.emitting = true
 			timer.start(1.0)
 			time_remaining = dash_duration
-		else: 
-			print("We can't dash if we are in idle!")
+		#else: 
+			#print("We can't dash if we are in idle!")
 
 func _physics_process(delta: float) -> void:
 	if direction.is_zero_approx():
 		return
-	player.velocity = direction * player.SPEED * speed_multiplier
+	player.velocity = direction * player.stats.get_base_speed() * speed_multiplier
 	time_remaining -= delta
 	if time_remaining <= 0:
 		direction = Vector3.ZERO

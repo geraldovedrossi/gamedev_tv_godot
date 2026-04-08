@@ -1,7 +1,6 @@
 extends CharacterBody3D
 class_name Player
 
-const SPEED = 5.0
 const JUMP_VELOCITY = 4.5
 const DECAY := 8.0
 
@@ -15,6 +14,8 @@ var _attack_direction := Vector3.ZERO
 @export var max_boundary: float = 10
 @export var animation_decay: float = 20.0
 @export var attack_move_speed: float = 2.0
+@export_category("RPG Stats")
+@export var stats: CharacterStats
 
 @onready var horizontal_pivot: Node3D = $HorizontalPivot
 @onready var vertical_pivot: Node3D = $HorizontalPivot/VerticalPivot
@@ -28,6 +29,7 @@ var _attack_direction := Vector3.ZERO
 func _ready() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	health_component.update_max_health(30.0)
+	print(stats.get_base_speed())
 
 func _physics_process(delta: float) -> void:
 	frame_camera_rotation()
@@ -43,6 +45,8 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 
 func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("debug_gain_xp"):
+			stats.xp += 1000
 	if event.is_action_pressed("ui_cancel"):
 		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
@@ -85,8 +89,8 @@ func slash_attack() -> void:
 func handle_idle_physics_frame(delta:float, direction: Vector3) -> void:
 	if not rig.is_idle() and not rig.is_dashing():
 		return
-	velocity.x = exponential_decay(velocity.x, direction.x * SPEED, DECAY, delta)
-	velocity.z = exponential_decay(velocity.z, direction.z * SPEED, DECAY, delta)
+	velocity.x = exponential_decay(velocity.x, direction.x * stats.get_base_speed(), DECAY, delta)
+	velocity.z = exponential_decay(velocity.z, direction.z * stats.get_base_speed(), DECAY, delta)
 	if direction:
 		look_toward_direction(direction, delta)
 
@@ -97,7 +101,7 @@ func handle_slashing_physics_frame(delta: float) -> void:
 		velocity.x = _attack_direction.x * attack_move_speed
 		velocity.z = _attack_direction.y * attack_move_speed
 		look_toward_direction(_attack_direction, delta)
-	attack_cast.deal_damage(15.0)
+	attack_cast.deal_damage(10.0 + stats.get_damage_modifier())
 	
 func handle_overhead_physics_frame() -> void:
 	if not rig.is_overhead():
@@ -112,7 +116,7 @@ func _on_health_component_defeat() -> void:
 	set_physics_process(false)
 
 func _on_rig_heavy_attack() -> void:
-	area_attack.deal_damage(50.0)
+	area_attack.deal_damage(40.0 + stats.get_damage_modifier())
 
 func exponential_decay(a: float, b: float, decay: float, delta:float) -> float:
 	return b + (a - b) * exp(-decay * delta)

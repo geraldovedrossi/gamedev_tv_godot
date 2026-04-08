@@ -8,4 +8,5 @@ func deal_damage(damage:float) -> void:
 	if collider is Enemy:
 		printt(collider, "Max HP: ", collider.max_health)
 		collider.health_component.take_damage(damage)
+		print("Damage dealead: " + str(damage))
 		add_exception(collider)

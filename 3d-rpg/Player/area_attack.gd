@@ -5,3 +5,4 @@ func deal_damage(damage: float) -> void:
 		var collider = get_collider(collision)
 		if collider is Player or collider is Enemy:
 			collider.health_component.take_damage(damage)
+			print("Damage dealead: " + str(damage))
