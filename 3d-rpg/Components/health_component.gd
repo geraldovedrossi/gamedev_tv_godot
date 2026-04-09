@@ -4,6 +4,8 @@ class_name HealthComponent
 signal defeat()
 signal health_changed()
 
+@export var body: PhysicsBody3D
+
 var max_health: float
 var current_health: float:
 	set(value):
@@ -16,5 +18,19 @@ func update_max_health(max_hp_in: float) -> void:
 	max_health = max_hp_in
 	current_health = max_health
 
-func take_damage(damage_in: float) -> void:
-	current_health -= damage_in
+func take_damage(damage_in: float, is_critical: bool) -> void:
+	var damage = damage_in
+	var color: Color
+	var position_in = body.global_position
+	if is_critical:
+		damage *= 2.0
+		print("Critical")
+		print("Damage dealead: " + str(damage))
+		color = Color.RED
+	else:
+		print("Damage dealead: " + str(damage))
+		color = Color.WHITE
+	current_health -= damage
+	if body is Enemy:
+		position_in.y += 1.5
+	VfxManager.spawn_damage_number(damage, color, position_in)

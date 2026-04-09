@@ -28,8 +28,10 @@ var _attack_direction := Vector3.ZERO
 
 func _ready() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
-	health_component.update_max_health(30.0)
-	print(stats.get_base_speed())
+	health_component.update_max_health(stats.get_max_hp())
+	stats.level_up_notification.connect(
+		func(): health_component.update_max_health(stats.get_max_hp())
+	)
 
 func _physics_process(delta: float) -> void:
 	frame_camera_rotation()
@@ -101,7 +103,7 @@ func handle_slashing_physics_frame(delta: float) -> void:
 		velocity.x = _attack_direction.x * attack_move_speed
 		velocity.z = _attack_direction.y * attack_move_speed
 		look_toward_direction(_attack_direction, delta)
-	attack_cast.deal_damage(10.0 + stats.get_damage_modifier())
+	attack_cast.deal_damage(10.0 + stats.get_damage_modifier(), stats.get_crit_chance())
 	
 func handle_overhead_physics_frame() -> void:
 	if not rig.is_overhead():
@@ -116,7 +118,7 @@ func _on_health_component_defeat() -> void:
 	set_physics_process(false)
 
 func _on_rig_heavy_attack() -> void:
-	area_attack.deal_damage(40.0 + stats.get_damage_modifier())
+	area_attack.deal_damage(40.0 + stats.get_damage_modifier(), stats.get_crit_chance())
 
 func exponential_decay(a: float, b: float, decay: float, delta:float) -> float:
 	return b + (a - b) * exp(-decay * delta)
