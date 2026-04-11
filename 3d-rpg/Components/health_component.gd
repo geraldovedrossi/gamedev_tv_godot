@@ -34,3 +34,6 @@ func take_damage(damage_in: float, is_critical: bool) -> void:
 	if body is Enemy:
 		position_in.y += 1.5
 	VfxManager.spawn_damage_number(damage, color, position_in)
+
+func get_health_string() -> String:
+	return str(int(current_health)) + " / " + str(int(max_health))

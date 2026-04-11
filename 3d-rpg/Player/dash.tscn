@@ -29,7 +29,6 @@ material = SubResource("StandardMaterial3D_cjdsg")
 
 [node name="Dash" type="Node3D"]
 script = ExtResource("1_bedmj")
-speed_multiplier = 3.0
 
 [node name="Timer" type="Timer" parent="."]
 one_shot = true
