@@ -71,10 +71,6 @@ func level_up() -> void:
 	agility.increase()
 	endurance.increase()
 	level_up_notification.emit()
-	printt("Level UP!!!!",
-		("Level: " + str(level)),
-		("Speed: "+ str(get_base_speed()) )
-	)
 
 func percentage_level_up_boundary() -> int:
 	return int(50 * pow(1.2, level))

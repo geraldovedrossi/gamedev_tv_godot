@@ -24,11 +24,8 @@ func take_damage(damage_in: float, is_critical: bool) -> void:
 	var position_in = body.global_position
 	if is_critical:
 		damage *= 2.0
-		print("Critical")
-		print("Damage dealead: " + str(damage))
 		color = Color.RED
 	else:
-		print("Damage dealead: " + str(damage))
 		color = Color.WHITE
 	current_health -= damage
 	if body is Enemy:
