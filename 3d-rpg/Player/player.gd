@@ -5,6 +5,7 @@ const JUMP_VELOCITY = 4.5
 const DECAY := 8.0
 
 var _look := Vector2.ZERO
+var gravity:float = ProjectSettings.get_setting("physics/3d/default_gravity")
 
 # Stores the direction the player moves when attacking
 var _attack_direction := Vector3.ZERO
@@ -45,7 +46,7 @@ func _physics_process(delta: float) -> void:
 	handle_overhead_physics_frame()
 		# Add the gravity.
 	if not is_on_floor():
-		velocity += get_gravity() * delta
+		velocity.y -= gravity * delta
 	
 	move_and_slide()
 
