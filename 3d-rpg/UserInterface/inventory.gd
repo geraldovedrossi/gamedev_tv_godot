@@ -1,4 +1,5 @@
 extends Control
+class_name Inventory
 
 @onready var level_label: Label = %LevelLabel
 
@@ -7,8 +8,15 @@ extends Control
 @onready var endurance_value: Label = %EnduranceValue
 @onready var speed_value: Label = %SpeedValue
 @onready var attack_value: Label = %AttackValue
+@onready var item_grid: GridContainer = %ItemGrid
+@onready var gold_label: Label = %GoldLabel
 
 @onready var player: Player = get_parent().player
+
+@onready var gold := 0:
+	set(value):
+		gold = value
+		gold_label.text = str(gold) + "g"
 
 func _ready() -> void:
 	update_stats()
@@ -31,3 +39,10 @@ func get_weapon_value() -> float:
 
 func _on_back_button_pressed() -> void:
 	get_parent().open_menu()
+
+func add_item(icon: ItemIcon) -> void:
+	icon.get_parent().remove_child(icon)
+	item_grid.add_child(icon)
+
+func add_currency(currency_in: int) -> void:
+	gold += currency_in
