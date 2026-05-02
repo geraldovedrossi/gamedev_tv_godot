@@ -1,0 +1,25 @@
+[gd_scene load_steps=5 format=3 uid="uid://c5i0n6kv75bvq"]
+
+[ext_resource type="Script" uid="uid://biou8riiufq6c" path="res://Interactible/passage.gd" id="1_hknka"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8tyxm"]
+albedo_color = Color(0.039215688, 0.039215688, 0.039215688, 1)
+proximity_fade_enabled = true
+
+[sub_resource type="BoxMesh" id="BoxMesh_hknka"]
+material = SubResource("StandardMaterial3D_8tyxm")
+size = Vector3(5, 4, 1)
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_auv5t"]
+points = PackedVector3Array(2.5, 2, 0.5, 2.5, 2, -0.5, -2.5, 2, 0.5, 2.5, -2, 0.5, 2.5, -2, -0.5, -2.5, 2, -0.5, -2.5, -2, 0.5, -2.5, -2, -0.5)
+
+[node name="Passage" type="StaticBody3D"]
+collision_layer = 3
+script = ExtResource("1_hknka")
+next_level = "<null>"
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_hknka")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("ConvexPolygonShape3D_auv5t")

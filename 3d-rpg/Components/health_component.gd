@@ -4,6 +4,8 @@ class_name HealthComponent
 signal defeat()
 signal health_changed()
 
+var armor_value := 0.0
+
 @export var body: PhysicsBody3D
 
 var max_health: float
@@ -19,7 +21,8 @@ func update_max_health(max_hp_in: float) -> void:
 	current_health = max_health
 
 func take_damage(damage_in: float, is_critical: bool) -> void:
-	var damage = damage_in
+	var damage_blocked = damage_in * armor_value
+	var damage = damage_in - damage_blocked
 	var color: Color
 	var position_in = body.global_position
 	if is_critical:
@@ -34,3 +37,6 @@ func take_damage(damage_in: float, is_critical: bool) -> void:
 
 func get_health_string() -> String:
 	return str(int(current_health)) + " / " + str(int(max_health))
+	
+func update_armor_value(armor_in: float) -> void:
+	armor_value = armor_in / 100.0
