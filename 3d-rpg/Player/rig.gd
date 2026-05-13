@@ -45,9 +45,10 @@ func is_dashing() -> bool:
 	return playback.get_current_node() == "Dash"
 
 func set_active_mesh(active_mesh: MeshInstance3D) -> void:
-	for child in skeleton_3d.get_children():
-		child.visible = false
-	active_mesh.visible = true
+	if skeleton_3d:
+		for child in skeleton_3d.get_children():
+			child.visible = false
+		active_mesh.visible = true
 
 
 func _on_animation_tree_animation_finished(anim_name: StringName) -> void:
@@ -55,16 +56,18 @@ func _on_animation_tree_animation_finished(anim_name: StringName) -> void:
 		heavy_attack.emit()
 
 func replace_shield(shield_scene: PackedScene) -> void:
-	for child in shield_slot.get_children():
-		child.queue_free()
-	var new_shield := shield_scene.instantiate()
-	shield_slot.add_child(new_shield)
+	if shield_slot:
+		for child in shield_slot.get_children():
+			child.queue_free()
+		var new_shield := shield_scene.instantiate()
+		shield_slot.add_child(new_shield)
 	
 func replace_weapon(weapon_scene: PackedScene) -> void:
-	for child in weapon_slot.get_children():
-		child.queue_free()
-	var new_weapon := weapon_scene.instantiate()
-	weapon_slot.add_child(new_weapon)
+	if weapon_slot:
+		for child in weapon_slot.get_children():
+			child.queue_free()
+		var new_weapon := weapon_scene.instantiate()
+		weapon_slot.add_child(new_weapon)
 
 func replace_armor(armor_type: ArmorIcon.armor_type) -> void:
 	match armor_type:
