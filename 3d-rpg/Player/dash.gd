@@ -12,7 +12,6 @@ var time_remaining := 0.0
 
 func _unhandled_input(event: InputEvent) -> void:
 	if not timer.is_stopped():
-		#print("Dash is in CoolDown!")
 		return
 	if not player.is_physics_processing():
 		return
@@ -25,8 +24,6 @@ func _unhandled_input(event: InputEvent) -> void:
 			gpu_particles_3d.emitting = true
 			timer.start(player.stats.get_dash_cooldown()) #Cooldown
 			time_remaining = dash_duration
-		#else: 
-			#print("We can't dash if we are in idle!")
 
 func _physics_process(delta: float) -> void:
 	if direction.is_zero_approx():

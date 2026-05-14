@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="3D-RPG"
-run/main_scene="uid://cr4654fn6luyn"
+run/main_scene="uid://cfg6hh3amt4xa"
 config/features=PackedStringArray("4.5", "Forward Plus")
 config/icon="res://icon.svg"
 

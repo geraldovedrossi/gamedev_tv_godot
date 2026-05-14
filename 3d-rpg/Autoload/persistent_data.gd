@@ -5,27 +5,31 @@ extends Control
 @onready var shield_node: Control = $ShieldNode
 @onready var armor_node: Control = $ArmorNode
 
+var gold : int = 0
+var current_health := 0
+
 func cache_gear(player: Player) -> void:
 	for item in player.user_interface.inventory.item_grid.get_children():
 		item.get_parent().remove_child(item)
 		inventory_node.add_child(item)
 		cache_item(item, inventory_node)
-	if player.user_interface.inventory.get_weapon():
-		cache_item(
-			player.user_interface.inventory.get_weapon(),
-			weapon_node
-		)
-	if player.user_interface.inventory.get_shield():
-		cache_item(
-			player.user_interface.inventory.get_shield(),
-			shield_node
-		)
-	if player.user_interface.inventory.get_armor():
-		cache_item(
-			player.user_interface.inventory.get_armor(),
-			armor_node
-		)
-		
+	cache_item(
+		player.user_interface.inventory.get_weapon(),
+		weapon_node
+	)
+	cache_item(
+		player.user_interface.inventory.get_shield(),
+		shield_node
+	)
+	cache_item(
+		player.user_interface.inventory.get_armor(),
+		armor_node
+	)
+	gold = player.user_interface.inventory.gold
+
+func cache_player_data(player: Player) -> void:
+	current_health = player.health_component.current_health
+
 func get_inventory() -> Array:
 	return inventory_node.get_children()
 	

@@ -112,4 +112,5 @@ func load_items_from_persistant_data() -> void:
 		add_item(item)
 	for item in PersistentData.get_equipped_items():
 		add_item(item)
-		interact(item)
+		interact.call_deferred(item)
+	gold = PersistentData.gold
